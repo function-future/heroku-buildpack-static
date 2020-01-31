@@ -109,6 +109,11 @@ http {
       # can reuse variable set above
       proxy_pass $<%= hash['name'] %>;
       proxy_ssl_server_name on;
+      <% if hash['websocket'] == true %>
+        proxy_set_header Upgrade "websocket";
+        proxy_http_version 1.1;
+        proxy_set_header Connection "Upgrade";
+      <% end %>
       <% %w(http https).each do |scheme| %>
       proxy_redirect <%= hash["redirect_#{scheme}"] %> <%= location %>;
       <% end %>
